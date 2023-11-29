@@ -1,6 +1,5 @@
 "use client";
 import { baseUrl } from "@/lib/constant";
-import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/zustand";
@@ -11,19 +10,6 @@ export default function Page() {
   if (isLoggedIn) {
     router.push("/");
   }
-  function isSlugFriendly(username) {
-    const pattern = /^[a-z0-9-]+$/;
-    return pattern.test(username) && username.length >= 6;
-  }
-
-  const [username, setUsername] = useState("");
-  const [isUsernameValid, setIsUsernameValid] = useState(true);
-
-  const handleUsernameChange = (e) => {
-    const newUsername = e.target.value;
-    setUsername(newUsername);
-    setIsUsernameValid(isSlugFriendly(newUsername));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,11 +21,6 @@ export default function Page() {
 
     if (password !== confirm_password) {
       toast.error("Password do not match");
-      return;
-    }
-    // Check if username is valid
-    if (!isUsernameValid) {
-      toast.error("Please fix the errors in the form.");
       return;
     }
 
@@ -93,15 +74,7 @@ export default function Page() {
               type="text"
               name="username"
               placeholder="John-doe"
-              value={username}
-              onChange={handleUsernameChange}
             />
-            {!isUsernameValid ? (
-              <span className=" text-[11px] text-red-500 ">
-                Username should only contain lowercase letters, numbers, hyphens
-                and minimum of 6 character.
-              </span>
-            ) : null}
           </div>
           <div className="mb-4">
             <label
